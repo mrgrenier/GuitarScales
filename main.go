@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/music-theory/diagram"
-	"github.com/music-theory/note"
+	"github.com/mrgrenier/GuitarScales/diagram"
+	"github.com/mrgrenier/GuitarScales/note"
+	"github.com/mrgrenier/GuitarScales/scale"
 )
-import "github.com/music-theory/scale"
 
 func main() {
 

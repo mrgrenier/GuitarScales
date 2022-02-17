@@ -3,7 +3,7 @@ package scale
 import (
 	"container/ring"
 	"fmt"
-	"github.com/music-theory/note"
+	"github.com/mrgrenier/GuitarScales/note"
 	"sort"
 )
 

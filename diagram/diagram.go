@@ -180,7 +180,7 @@ func (fb *FretBoard) ColorScale(interval []string) {
 	// Draw the note circles
 	var radius float64 = 40
 
-	blankNoteColor := color.RGBA{0xff, 0xff, 0xff, 0xff}
+	blankNoteColor := color.RGBA{0xee, 0xee, 0xee, 0xff}
 	blankNoteFontColor := color.RGBA{0x00, 0x00, 0x00, 0xff}
 	rootNoteColor := color.RGBA{0xff, 0x44, 0x44, 0xff}
 	rootNoteFontColor := color.RGBA{0xff, 0xff, 0xff, 0xff}
@@ -251,17 +251,22 @@ func (fb *FretBoard) DrawInterval(note string, x, y, radius float64, textColor c
 
 }
 
-func (fb *FretBoard) DrawTitle(scaleName string, x, y float64) {
+func (fb *FretBoard) DrawTitle(scaleName, scaleNotes string, x, y float64) {
 
 	textColor := color.RGBA{0x00, 0x00, 0x00, 0xff}
 
 	var fontSize float64 = 44
+	var notesFontSize = fontSize * .75
 
+	scaleName = strings.Title(strings.ToLower(scaleName))
 	fb.gc.SetFillColor(textColor)
 	fb.gc.SetStrokeColor(textColor)
 
 	fb.gc.SetFontSize(fontSize)
 	fb.gc.FillStringAt(scaleName, x, y)
+
+	fb.gc.SetFontSize(notesFontSize)
+	fb.gc.FillStringAt(scaleNotes, x, y+fontSize+fontSize/2)
 
 }
 

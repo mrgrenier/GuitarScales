@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/mrgrenier/GuitarScales/note"
 	"sort"
+	"strings"
 )
 
 type Scale struct {
@@ -43,6 +44,17 @@ func NewScale(root note.Note) *Scale {
 	n.scales["egyptian"] = append(n.scales["egyptian"], "1", "2", "4", "5", "b7")
 	n.scales["enigmatic"] = append(n.scales["enigmatic"], "1", "b2", "3", "#4", "#5", "#6", "7")
 	n.scales["hinduston"] = append(n.scales["hinduston"], "1", "2", "3", "4", "5", "b6", "b7")
+	n.scales["hungarian major"] = append(n.scales["hungarian major"], "1", "#2", "3", "#4", "5", "6", "b7")
+	n.scales["hungarian gypsy "] = append(n.scales["hungarian gypsy "], "1", "2", "b3", "#4", "5", "b6", "7")
+	n.scales["japanese"] = append(n.scales["japanese"], "1", "b2", "4", "5", "b6")
+	n.scales["japanese hirajoshi"] = append(n.scales["japanese hirajoshi"], "1", "2", "b3", "5", "b6")
+	n.scales["japanese kumoi"] = append(n.scales["japanese kumoi"], "1", "2", "b3", "5", "6")
+	n.scales["japanese kokin joshi"] = append(n.scales["japanese kokin joshi"], "1", "b2", "4", "5", "b7")
+	n.scales["japanese iwato"] = append(n.scales["japanese iwato"], "1", "b2", "4", "b5", "b7")
+	n.scales["neapolitan major"] = append(n.scales["neapolitan major"], "1", "b2", "b3", "4", "5", "6", "7")
+	n.scales["neapolitan minor"] = append(n.scales["neapolitan minor"], "1", "b2", "b3", "4", "5", "b6", "7")
+	n.scales["oriental"] = append(n.scales["oriental"], "1", "b2", "3", "4", "b5", "6", "b7")
+	n.scales["overtone"] = append(n.scales["overtone"], "1", "2", "3", "#4", "5", "6", "b7")
 
 	allnotes := []note.Note{
 		{Name: "A", Alternate: root.Alternate},
@@ -106,6 +118,14 @@ func (n *Scale) ScaleInterval(name string) []string {
 		inter = append(inter, scaleNote)
 	}
 	return inter
+}
+
+func (n *Scale) GetScaleNotes(scaleName string) string {
+	var sb strings.Builder
+	for _, scaleNote := range n.scales[scaleName] {
+		sb.WriteString(n.ShowNoteAt(scaleNote).String())
+	}
+	return sb.String()
 }
 
 func (n *Scale) ShowAll() {

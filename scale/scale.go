@@ -55,6 +55,11 @@ func NewScale(root note.Note) *Scale {
 	n.scales["neapolitan minor"] = append(n.scales["neapolitan minor"], "1", "b2", "b3", "4", "5", "b6", "7")
 	n.scales["oriental"] = append(n.scales["oriental"], "1", "b2", "3", "4", "b5", "6", "b7")
 	n.scales["overtone"] = append(n.scales["overtone"], "1", "2", "3", "#4", "5", "6", "b7")
+	n.scales["pelog"] = append(n.scales["pelog"], "1", "b2", "b3", "5", "b6")
+	n.scales["persian"] = append(n.scales["persian"], "1", "b2", "3", "4", "b5", "b6", "7")
+	n.scales["romanian"] = append(n.scales["romanian"], "1", "2", "b3", "#4", "5", "6", "b7")
+	n.scales["scribian"] = append(n.scales["scribian"], "1", "b2", "3", "5", "6")
+	n.scales["symmetrical"] = append(n.scales["symmetrical"], "1", "b2", "b3", "3", "#4", "5", "6", "b7")
 
 	allnotes := []note.Note{
 		{Name: "A", Alternate: root.Alternate},

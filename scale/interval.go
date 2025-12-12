@@ -37,3 +37,7 @@ func (i *Interval) IntervalToOffset(interval string) (int, error) {
 	}
 	return 0, fmt.Errorf("%s, not a valid interval", interval)
 }
+
+func (i *Interval) GetOffset() map[string]int {
+	return i.offset
+}

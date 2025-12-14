@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"github.com/mrgrenier/GuitarScales/diagram"
 	"github.com/mrgrenier/GuitarScales/note"
 	"github.com/mrgrenier/GuitarScales/scale"
@@ -14,13 +16,17 @@ func main() {
 	scale_names := scale.ScaleNames()
 	for _, scaleName := range scale_names {
 		fretdiagram := diagram.NewFretBoard()
-		fretdiagram.DrawFretBoard()
+		fretdiagram.DrawDiagram()
 		inter := scale.ScaleInterval(scaleName)
 		fretdiagram.ColorScale(inter)
 		scaleNotes := scale.GetScaleNotes(scaleName)
 		fretdiagram.DrawTitle(scaleName, scaleNotes, 40, 100)
 		fretdiagram.SaveScaleDiagram("./output/" + scaleName + ".png")
 
+	}
+
+	if err := diagram.TilePNGsToPDF("./output", "./output/scales.pdf"); err != nil {
+		log.Fatal(err)
 	}
 
 }

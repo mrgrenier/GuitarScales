@@ -3,9 +3,10 @@ package scale
 import (
 	"container/ring"
 	"fmt"
-	"github.com/mrgrenier/GuitarScales/note"
 	"sort"
 	"strings"
+
+	"github.com/mrgrenier/GuitarScales/note"
 )
 
 type Scale struct {
@@ -32,8 +33,10 @@ func NewScale(root note.Note) *Scale {
 	n.scales["bebop dominant"] = append(n.scales["bebop dominant"], "1", "2", "3", "4", "5", "#6", "7")
 	n.scales["bebop major"] = append(n.scales["bebop major"], "1", "2", "3", "4", "5", "b6", "6", "7")
 	n.scales["minor blues"] = append(n.scales["minor blues"], "1", "b3", "4", "b5", "5", "b7")
+	n.scales["minor pentatonic"] = append(n.scales["minor pentatonic"], "1", "b3", "4", "5", "b7")
 	n.scales["voodoo blues"] = append(n.scales["voodoo blues"], "1", "b3", "4", "b5", "5", "6")
 	n.scales["major blues"] = append(n.scales["major blues"], "1", "2", "b3", "3", "5", "6")
+	n.scales["major pentatonic"] = append(n.scales["major pentatonic"], "1", "2", "3", "5", "6")
 	n.scales["arabian"] = append(n.scales["arabian"], "1", "2", "b3", "4", "b5", "b6", "6", "7")
 	n.scales["balinese"] = append(n.scales["balinese"], "1", "b2", "b3", "5", "b6")
 	n.scales["phrygian dominant"] = append(n.scales["phrygian dominant"], "1", "b2", "3", "4", "5", "b6", "b7")

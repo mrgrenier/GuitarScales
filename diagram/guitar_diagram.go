@@ -7,6 +7,8 @@ import (
 	"math"
 	"os"
 	"strings"
+	"unicode"
+	"unicode/utf8"
 
 	"github.com/golang/freetype/truetype"
 	"github.com/llgcode/draw2d"
@@ -130,11 +132,11 @@ func NewFretBoard() *FretBoard {
 
 func (fb *FretBoard) DrawDiagram() {
 	var offsetX float64 = 40
-	var offsetY float64 = (float64(fb.canvasHeight) / 2) + float64(fb.canvasHeight)/10
+	var offsetY = (float64(fb.canvasHeight) / 2) + float64(fb.canvasHeight)/10
 	var scale float64 = 150
-	var scale_factor float64 = 0.0
-	var distanceFromNut float64 = 0.0
-	var bridgeToFret float64 = 0.0
+	var scale_factor = 0.0
+	var distanceFromNut = 0.0
+	var bridgeToFret = 0.0
 	var nut = []float64{(distanceFromNut * scale) + offsetX, (2.2 * scale) + offsetY, (distanceFromNut * scale) + offsetX, (-2.2 * scale) + offsetY}
 	var va = []float64{(distanceFromNut * scale) + offsetX, (2.2 * scale) + offsetY, (distanceFromNut * scale) + offsetX, (-2.2 * scale) + offsetY}
 
@@ -267,7 +269,7 @@ func (fb *FretBoard) DrawTitle(scaleName, scaleNotes string, x, y float64) {
 	var fontSize float64 = 44
 	var notesFontSize = fontSize * .75
 
-	scaleName = strings.Title(strings.ToLower(scaleName))
+	scaleName = titleCaseASCIIWords(strings.ToLower(scaleName))
 	fb.gc.SetFillColor(textColor)
 	fb.gc.SetStrokeColor(textColor)
 
@@ -291,4 +293,20 @@ func (fb *FretBoard) getFlatName(interval string) string {
 		return (flatname)
 	}
 	return interval
+}
+
+// letter of each whitespace-separated word.
+func titleCaseASCIIWords(s string) string {
+	parts := strings.Fields(s)
+	for i, p := range parts {
+		if p == "" {
+			continue
+		}
+		r, size := utf8.DecodeRuneInString(p)
+		if r == utf8.RuneError && size == 0 {
+			continue
+		}
+		parts[i] = string(unicode.ToUpper(r)) + p[size:]
+	}
+	return strings.Join(parts, " ")
 }

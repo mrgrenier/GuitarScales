@@ -21,11 +21,16 @@ func main() {
 		fretdiagram.ColorScale(inter)
 		scaleNotes := scale.GetScaleNotes(scaleName)
 		fretdiagram.DrawTitle(scaleName, scaleNotes, 40, 100)
-		fretdiagram.SaveScaleDiagram("./output/" + scaleName + ".png")
+		fretdiagram.SaveScaleDiagram("./output/guitar/" + scaleName + ".png")
+		pianodiagram := diagram.NewPianoDiagram()
+		pianodiagram.DrawDiagram()
+		pianodiagram.ColorScale(inter)
+		pianodiagram.DrawTitle(scaleName, scaleNotes, 40, 100)
+		pianodiagram.SaveScaleDiagram("./output/piano/" + scaleName + ".png")
 
 	}
 
-	if err := diagram.TilePNGsToPDF("./output", "./output/scales.pdf"); err != nil {
+	if err := diagram.TilePNGsToPDF("./output/guitar/", "./output/scales.pdf"); err != nil {
 		log.Fatal(err)
 	}
 

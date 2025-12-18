@@ -31,15 +31,15 @@ const (
 
 func NewPianoDiagram() Diagram {
 	scaleOctaveWidth := 6.5
-	kb := &PianoDiagram{
+	p := &PianoDiagram{
 		scaleOctaveWidth: scaleOctaveWidth,
 		scaleHeight:      1.25,
 		canvasWidth:      1188,
 		canvasHeight:     940,
 		keyWidth:         scaleOctaveWidth / 12,
 	}
-	kb.dest = image.NewRGBA(image.Rect(0, 0, kb.canvasWidth, kb.canvasHeight))
-	kb.gc = draw2dimg.NewGraphicContext(kb.dest)
+	p.dest = image.NewRGBA(image.Rect(0, 0, p.canvasWidth, p.canvasHeight))
+	p.gc = draw2dimg.NewGraphicContext(p.dest)
 
 	draw2d.SetFontFolder("./resource/font")
 	b, err := os.ReadFile("./resource/font/wqy-zenhei.ttf")
@@ -56,37 +56,37 @@ func NewPianoDiagram() Diagram {
 		font,
 	)
 
-	kb.gc.SetFontData(fontdata)
+	p.gc.SetFontData(fontdata)
 
-	kb.StringFret2Interval = make(map[int]map[string]bool)
+	p.StringFret2Interval = make(map[int]map[string]bool)
 	for f := 0; f < 12; f++ {
-		kb.StringFret2Interval[f] = make(map[string]bool)
+		p.StringFret2Interval[f] = make(map[string]bool)
 	}
 
-	kb.StringFret2Interval[0]["1"] = true
-	kb.StringFret2Interval[1]["b2"] = true
-	kb.StringFret2Interval[2]["2"] = true
-	kb.StringFret2Interval[3]["#2"] = true
-	kb.StringFret2Interval[3]["b3"] = true
-	kb.StringFret2Interval[4]["3"] = true
-	kb.StringFret2Interval[5]["4"] = true
-	kb.StringFret2Interval[6]["#4"] = true
-	kb.StringFret2Interval[6]["b5"] = true
-	kb.StringFret2Interval[7]["5"] = true
-	kb.StringFret2Interval[8]["#5"] = true
-	kb.StringFret2Interval[8]["b6"] = true
-	kb.StringFret2Interval[9]["6"] = true
-	kb.StringFret2Interval[10]["#6"] = true
-	kb.StringFret2Interval[10]["b7"] = true
-	kb.StringFret2Interval[11]["7"] = true
+	p.StringFret2Interval[0]["1"] = true
+	p.StringFret2Interval[1]["b2"] = true
+	p.StringFret2Interval[2]["2"] = true
+	p.StringFret2Interval[3]["#2"] = true
+	p.StringFret2Interval[3]["b3"] = true
+	p.StringFret2Interval[4]["3"] = true
+	p.StringFret2Interval[5]["4"] = true
+	p.StringFret2Interval[6]["#4"] = true
+	p.StringFret2Interval[6]["b5"] = true
+	p.StringFret2Interval[7]["5"] = true
+	p.StringFret2Interval[8]["#5"] = true
+	p.StringFret2Interval[8]["b6"] = true
+	p.StringFret2Interval[9]["6"] = true
+	p.StringFret2Interval[10]["#6"] = true
+	p.StringFret2Interval[10]["b7"] = true
+	p.StringFret2Interval[11]["7"] = true
 
-	kb.flatName = make(map[string]string)
-	kb.flatName["#2"] = "b3"
-	kb.flatName["#4"] = "b5"
-	kb.flatName["#5"] = "b6"
-	kb.flatName["#6"] = "b7"
+	p.flatName = make(map[string]string)
+	p.flatName["#2"] = "b3"
+	p.flatName["#4"] = "b5"
+	p.flatName["#5"] = "b6"
+	p.flatName["#6"] = "b7"
 
-	return kb
+	return p
 }
 
 var _ Diagram = (*PianoDiagram)(nil)
@@ -177,21 +177,19 @@ func (p *PianoDiagram) ColorScale(interval []string) {
 				// for the notes not in the interval favor the flat name ins stead of the sharp name
 				note = p.getFlatName(note)
 			}
-			x := x0 + float64(i)*segW
-			x1 = x + w
-
-			p.gc.BeginPath() // Initialize a new path
-			p.gc.SetFillColor(noteColor)
-			p.gc.SetStrokeColor(noteColor)
-			p.gc.MoveTo(x, y0)
-			p.gc.LineTo(x1, y0)
-			p.gc.LineTo(x1, y1)
-			p.gc.LineTo(x, y1)
-			p.gc.Close()
-			p.DrawInterval(note, x, y0, w/2, fontColor)
-
 		}
-
+		x := x0 + float64(i)*segW
+		x1 = x + segW
+		p.gc.BeginPath() // Initialize a new path
+		p.gc.SetFillColor(noteColor)
+		p.gc.SetStrokeColor(fontColor)
+		p.gc.MoveTo(x, y0)
+		p.gc.LineTo(x1, y0)
+		p.gc.LineTo(x1, y1)
+		p.gc.LineTo(x, y1)
+		p.gc.Close()
+		p.gc.FillStroke()
+		p.DrawInterval(note, x+segW/1.5, y0+h/2.1, segW, fontColor)
 	}
 }
 
@@ -207,12 +205,12 @@ func (p *PianoDiagram) DrawInterval(note string, x, y, radius float64, textColor
 
 	if strings.HasPrefix(note, "b") {
 		p.gc.SetFontSize(accidentalsFontSize)
-		p.gc.FillStringAt(flat, x-(radius+accidentalsFontSize)/2.25, y+accidentalsFontSize/2)
+		p.gc.FillStringAt(flat, x-(radius+accidentalsFontSize)/3, y+accidentalsFontSize)
 		x = x + accidentalsFontSize/2
 		note = note[1:]
 	} else if strings.HasPrefix(note, "#") {
 		p.gc.SetFontSize(accidentalsFontSize)
-		p.gc.FillStringAt(sharp, x-(radius+accidentalsFontSize)/2.25, y+accidentalsFontSize/2)
+		p.gc.FillStringAt(sharp, x-(radius+accidentalsFontSize)/3, y+accidentalsFontSize)
 		x = x + accidentalsFontSize/2
 		note = note[1:]
 	}
@@ -227,7 +225,10 @@ func (p *PianoDiagram) DrawTitle(scaleName, scaleNotes string, x, y float64) {
 }
 
 func (p *PianoDiagram) SaveScaleDiagram(filename string) {
-	// save output image
+	err := draw2dimg.SaveToPngFile(filename, p.dest)
+	if err != nil {
+		return
+	}
 }
 
 func (p *PianoDiagram) getFlatName(interval string) string {

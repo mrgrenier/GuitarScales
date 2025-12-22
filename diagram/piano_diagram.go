@@ -30,7 +30,7 @@ type PianoDiagram struct {
 }
 
 const (
-	offsetX = 40.0
+	offsetX = 0.0
 	offsetY = 150.0
 )
 

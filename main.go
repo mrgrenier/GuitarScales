@@ -25,12 +25,17 @@ func main() {
 		pianodiagram := diagram.NewPianoDiagram()
 		pianodiagram.DrawDiagram()
 		pianodiagram.ColorScale(inter)
-		pianodiagram.DrawTitle(scaleName, scaleNotes, 40, 100)
+		pianodiagram.DrawTitle(scaleName, scaleNotes, 40, 50)
 		pianodiagram.SaveScaleDiagram("./output/piano/" + scaleName + ".png")
 
 	}
 
-	if err := diagram.TilePNGsToPDF("./output/guitar/", "./output/scales.pdf"); err != nil {
+	guitar := diagram.NewFretBoard()
+	if err := guitar.TilePNGsToPDF("./output/guitar/", "./output/guitar_scales.pdf"); err != nil {
+		log.Fatal(err)
+	}
+	piano := diagram.NewPianoDiagram()
+	if err := piano.TilePNGsToPDF("./output/piano/", "./output/piano_scales.pdf"); err != nil {
 		log.Fatal(err)
 	}
 

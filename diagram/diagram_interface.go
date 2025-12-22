@@ -7,4 +7,5 @@ type Diagram interface {
 	ColorScale(interval []string)
 	DrawTitle(scaleName, scaleNotes string, x, y float64)
 	SaveScaleDiagram(filename string)
+	TilePNGsToPDF(inputDir, outPDFPath string) error
 }

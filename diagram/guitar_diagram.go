@@ -339,7 +339,7 @@ func (fb *FretBoard) TilePNGsToPDF(inputDir, outPDFPath string) error {
 	gc := draw2dpdf.NewGraphicContext(pdf)
 
 	for i, p := range pngPaths {
-		if i%(cols*rows) == 0 {
+		if i > 0 && i%(cols*rows) == 0 {
 			pdf.AddPage()
 		}
 

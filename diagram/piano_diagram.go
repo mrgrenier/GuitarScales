@@ -35,7 +35,7 @@ const (
 )
 
 func NewPianoDiagram() Diagram {
-	scaleOctaveWidth := 6.5
+	scaleOctaveWidth := 6.5625
 	p := &PianoDiagram{
 		scaleOctaveWidth: scaleOctaveWidth,
 		scaleHeight:      1.25,
@@ -303,7 +303,7 @@ func (p *PianoDiagram) TilePNGsToPDF(inputDir, outPDFPath string) error {
 	gc := draw2dpdf.NewGraphicContext(pdf)
 
 	for i, p := range pngPaths {
-		if i%(cols*rows) == 0 {
+		if i > 0 && i%(cols*rows) == 0 {
 			pdf.AddPage()
 		}
 

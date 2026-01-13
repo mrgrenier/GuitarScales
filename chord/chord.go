@@ -3,6 +3,7 @@ package chord
 import (
 	"container/ring"
 	"fmt"
+
 	"github.com/mrgrenier/GuitarScales/note"
 	"github.com/mrgrenier/GuitarScales/scale"
 )
@@ -25,7 +26,7 @@ func NewChord(root note.Note) *Chord {
 	n.chords2intervals["Major7th"] = append(n.chords2intervals["Major7th"], "1", "3", "5", "7")
 	n.chords2intervals["Major9th"] = append(n.chords2intervals["Major9th"], "1", "3", "5", "7", "2")
 	n.chords2intervals["Major13th"] = append(n.chords2intervals["Major13th"], "1", "3", "5", "7", "2", "6")
-	n.chords2intervals["Minor"] = append(n.chords2intervals["Minor"], "1", "3", "5")
+	n.chords2intervals["Minor"] = append(n.chords2intervals["Minor"], "1", "b3", "5")
 	n.chords2intervals["Minor6th"] = append(n.chords2intervals["Minor6th"], "1", "b3", "5", "6")
 	n.chords2intervals["Minor7th"] = append(n.chords2intervals["Minor7th"], "1", "b3", "5", "b7")
 	n.chords2intervals["Minor9th"] = append(n.chords2intervals["Minor9th"], "1", "b3", "5", "b7", "2")
@@ -91,4 +92,43 @@ func (n *Chord) SetRoot(root note.Note) {
 		}
 		n.notes = n.notes.Next()
 	}
+}
+
+func (n *Chord) GetChordNames(root note.Note, intervals []string) ([]string, error) {
+	// Save the current root to restore it later
+	originalRoot := n.root
+
+	// Temporarily set the new root
+	n.SetRoot(root)
+
+	// Ensure we restore the original root when done
+	defer func() {
+		n.root = originalRoot
+	}()
+
+	// Calculate the bitmask for the given intervals
+	inputMask := 0
+	for _, interval := range intervals {
+		offset, err := n.interval.IntervalToOffset(interval)
+		if err != nil {
+			return nil, fmt.Errorf("invalid interval %s: %v", interval, err)
+		}
+		inputMask = inputMask | 1<<(11-offset)
+	}
+
+	// Find all chords that are subsets of the input intervals
+	var matchingChords []string
+	for chordMask, chordName := range n.intervals2chords {
+		// Check if the chord is a subset of the input intervals
+		// A chord is a subset if all its bits are present in the input mask
+		if (chordMask & inputMask) == chordMask {
+			matchingChords = append(matchingChords, chordName)
+		}
+	}
+
+	if len(matchingChords) == 0 {
+		return nil, fmt.Errorf("no chords found for intervals %v", intervals)
+	}
+
+	return matchingChords, nil
 }

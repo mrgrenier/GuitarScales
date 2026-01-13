@@ -166,3 +166,7 @@ func (n *Scale) ShowNoteAt(interval string) note.Note {
 	no := n.notes.Value.(note.Note)
 	return no
 }
+
+func (n *Scale) GetChord() {
+
+}

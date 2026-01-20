@@ -293,12 +293,11 @@ func (p *PianoDiagram) TilePNGsToPDF(inputDir, outPDFPath string) error {
 		topMargin   = 72.0 // 1 inch
 		sideMargin  = 36.0 // 0.5"
 		extraOffset = 36.0
-		gap         = 12.0
 	)
 
 	targetWidthPt := p.scaleOctaveWidth * 72.0
-	cellW := (pageW - 2*sideMargin - float64(cols-1)*gap) / float64(cols)
-	cellH := (pageH - topMargin - sideMargin - float64(rows-1)*gap) / float64(rows)
+	cellW := (pageW - 2*sideMargin - float64(cols-1)) / float64(cols)
+	cellH := (pageH - topMargin - sideMargin - float64(rows-1)) / float64(rows)
 
 	pdf := draw2dpdf.NewPdf("P", "pt", "Letter")
 	gc := draw2dpdf.NewGraphicContext(pdf)
@@ -322,8 +321,8 @@ func (p *PianoDiagram) TilePNGsToPDF(inputDir, outPDFPath string) error {
 		r := idxOnPage / cols
 		c := idxOnPage % cols
 
-		x0 := sideMargin + float64(c)*(cellW+gap)
-		y0 := topMargin + extraOffset + float64(r)*(cellH+gap)
+		x0 := sideMargin + float64(c)*(cellW)
+		y0 := topMargin + extraOffset + float64(r)*(cellH)
 
 		iw := float64(img.Bounds().Dx())
 		ih := float64(img.Bounds().Dy())

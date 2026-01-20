@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
+	"github.com/mrgrenier/GuitarScales/chord"
 	"github.com/mrgrenier/GuitarScales/diagram"
 	"github.com/mrgrenier/GuitarScales/note"
 	"github.com/mrgrenier/GuitarScales/scale"
@@ -10,7 +12,7 @@ import (
 
 func main() {
 
-	root := note.Note{Name: "C", Alternate: note.FLAT}
+	root := note.Note{Name: "A", Alternate: note.SHARP}
 
 	scale := scale.NewScale(root)
 	scale_names := scale.ScaleNames()
@@ -37,6 +39,23 @@ func main() {
 	piano := diagram.NewPianoDiagram()
 	if err := piano.TilePNGsToPDF("./output/piano/", "./output/piano_scales.pdf"); err != nil {
 		log.Fatal(err)
+	}
+
+	// Show chords in the "ionian" scale
+
+	scaleName := "ionian"
+	interval := scale.IntervalOffset()
+	print(interval)
+	
+	s := scale.ScaleInterval(scaleName)
+	chords := chord.NewChord(root)
+	for _, i := range s {
+		n := scale.ShowNoteAt(i)
+		t, _ := chords.GetChordNames(n, s)
+		for _, chordName := range t {
+			fmt.Println(n.Name + chordName)
+		}
+
 	}
 
 }

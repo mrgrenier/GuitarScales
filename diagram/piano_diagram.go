@@ -35,13 +35,13 @@ const (
 )
 
 func NewPianoDiagram() Diagram {
-	scaleOctaveWidth := 6.5625
+	scaleOctaveWidth := 6.5625 + 6.5625/12
 	p := &PianoDiagram{
 		scaleOctaveWidth: scaleOctaveWidth,
 		scaleHeight:      1.25,
 		canvasWidth:      1188,
 		canvasHeight:     940,
-		keyWidth:         scaleOctaveWidth / 12,
+		keyWidth:         scaleOctaveWidth / (12 + 1),
 	}
 	p.dest = image.NewRGBA(image.Rect(0, 0, p.canvasWidth, p.canvasHeight))
 	p.gc = draw2dimg.NewGraphicContext(p.dest)
@@ -64,7 +64,7 @@ func NewPianoDiagram() Diagram {
 	p.gc.SetFontData(fontdata)
 
 	p.StringFret2Interval = make(map[int]map[string]bool)
-	for f := 0; f < 12; f++ {
+	for f := 0; f <= 12; f++ {
 		p.StringFret2Interval[f] = make(map[string]bool)
 	}
 
@@ -84,6 +84,7 @@ func NewPianoDiagram() Diagram {
 	p.StringFret2Interval[10]["#6"] = true
 	p.StringFret2Interval[10]["b7"] = true
 	p.StringFret2Interval[11]["7"] = true
+	p.StringFret2Interval[12]["1"] = true
 
 	p.flatName = make(map[string]string)
 	p.flatName["#2"] = "b3"
@@ -126,7 +127,7 @@ func (p *PianoDiagram) DrawDiagram() {
 
 	// 12 segments (vertical dividers)
 	segW := p.keyWidth * unitToPx
-	for i := 1; i < 12; i++ {
+	for i := 1; i <= 12; i++ {
 		x := x0 + float64(i)*segW
 		p.gc.BeginPath()
 		p.gc.MoveTo(x, y0)
@@ -165,7 +166,7 @@ func (p *PianoDiagram) ColorScale(interval []string) {
 	x1 := x0 + w
 	y1 := y0 + h
 
-	for i := 0; i < 12; i++ {
+	for i := 0; i <= 12; i++ {
 		noteColor = blankNoteColor
 		fontColor = blankNoteFontColor
 		for note = range p.StringFret2Interval[i] {

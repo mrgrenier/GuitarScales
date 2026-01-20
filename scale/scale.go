@@ -167,6 +167,6 @@ func (n *Scale) ShowNoteAt(interval string) note.Note {
 	return no
 }
 
-func (n *Scale) GetChord() {
-
+func (n *Scale) IntervalOffset() *Interval {
+	return n.interval
 }

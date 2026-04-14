@@ -3,7 +3,8 @@ package scale
 import "fmt"
 
 type Interval struct {
-	offset map[string]int
+	offset  map[string]int
+	inverse map[int][]string
 }
 
 func NewInterval() *Interval {
@@ -28,6 +29,10 @@ func NewInterval() *Interval {
 	i.offset["b7"] = 10
 	i.offset["7"] = 11
 
+	i.inverse = make(map[int][]string)
+	for interval, offest := range i.offset {
+		i.inverse[offest] = append(i.inverse[offest], interval)
+	}
 	return i
 }
 
@@ -40,4 +45,8 @@ func (i *Interval) IntervalToOffset(interval string) (int, error) {
 
 func (i *Interval) GetOffset() map[string]int {
 	return i.offset
+}
+
+func (i *Interval) GetInverse() map[int][]string {
+	return i.inverse
 }

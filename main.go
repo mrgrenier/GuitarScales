@@ -58,17 +58,56 @@ func main() {
 
 	scaleName := "ionian"
 	interval := scale.IntervalOffset()
-	print(interval)
-	
-	s := scale.ScaleInterval(scaleName)
-	chords := chord.NewChord(root)
-	for _, i := range s {
-		n := scale.ShowNoteAt(i)
-		t, _ := chords.GetChordNames(n, s)
-		for _, chordName := range t {
-			fmt.Println(n.Name + chordName)
-		}
 
+	s := scale.ScaleInterval(scaleName)
+	inverse_lk := interval.GetInverse()
+	offset_lk := interval.GetOffset()
+
+	// f(x) = (x -2 +12) mod 12
+	var modes map[string][]string
+	modes = make(map[string][]string)
+	//build chords
+	for idx, j := range s {
+		mode_name := fmt.Sprintf("%d", idx+1)
+		for _, k := range s {
+			fmt.Printf("%s %d-%d %d %v\n", j, offset_lk[k], offset_lk[j], (offset_lk[k]-offset_lk[j]+12)%12, inverse_lk[(offset_lk[k]-offset_lk[j]+12)%12])
+			modes[mode_name] = append(modes[mode_name], inverse_lk[(offset_lk[k]-offset_lk[j]+12)%12]...)
+		}
+	}
+	chords := chord.NewChord(root)
+	for idx, i := range s {
+		n := scale.ShowNoteAt(i)
+		mode_name := fmt.Sprintf("%d", idx+1)
+
+		t, _ := chords.GetChordNames(n, modes[mode_name])
+		for _, chordName := range t {
+			fmt.Printf("%s %s\n", n.Name, chordName)
+		}
 	}
 
+}
+
+func indexOfString(slice []string, target string) int {
+	for i, s := range slice {
+		if s == target {
+			return i
+		}
+	}
+	return -1
+}
+
+func rotateLeftStrings(s []string, k int) []string {
+	if len(s) == 0 {
+		return s
+	}
+	k %= len(s)
+	return append(s[k:], s[:k]...)
+}
+
+func rotateRightStrings(s []string, k int) []string {
+	if len(s) == 0 {
+		return s
+	}
+	k %= len(s)
+	return append(s[len(s)-k:], s[:len(s)-k]...)
 }

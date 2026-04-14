@@ -21,28 +21,28 @@ func NewChord(root note.Note) *Chord {
 	n := &Chord{}
 	n.interval = scale.NewInterval()
 	n.chords2intervals = make(map[string][]string)
-	n.chords2intervals["Major"] = append(n.chords2intervals["Major"], "1", "3", "5")
-	n.chords2intervals["Major6th"] = append(n.chords2intervals["Major6th"], "1", "3", "5", "6")
-	n.chords2intervals["Major7th"] = append(n.chords2intervals["Major7th"], "1", "3", "5", "7")
-	n.chords2intervals["Major9th"] = append(n.chords2intervals["Major9th"], "1", "3", "5", "7", "2")
-	n.chords2intervals["Major13th"] = append(n.chords2intervals["Major13th"], "1", "3", "5", "7", "2", "6")
-	n.chords2intervals["Minor"] = append(n.chords2intervals["Minor"], "1", "b3", "5")
-	n.chords2intervals["Minor6th"] = append(n.chords2intervals["Minor6th"], "1", "b3", "5", "6")
-	n.chords2intervals["Minor7th"] = append(n.chords2intervals["Minor7th"], "1", "b3", "5", "b7")
-	n.chords2intervals["Minor9th"] = append(n.chords2intervals["Minor9th"], "1", "b3", "5", "b7", "2")
-	n.chords2intervals["Minor11th"] = append(n.chords2intervals["Minor11th"], "1", "b3", "5", "b7", "2", "4")
-	n.chords2intervals["Minor13th"] = append(n.chords2intervals["Minor13th"], "1", "b3", "5", "b7", "2", "6")
-	n.chords2intervals["Dim"] = append(n.chords2intervals["Dim"], "1", "b3", "b5")
-	n.chords2intervals["Dim7th"] = append(n.chords2intervals["Dim7th"], "1", "b3", "b5", "6")
-	n.chords2intervals["Dim7b5"] = append(n.chords2intervals["Dim7b5"], "1", "b3", "b5", "b7")
-	n.chords2intervals["Aug"] = append(n.chords2intervals["Aug"], "1", "3", "#5")
-	n.chords2intervals["Aug7th"] = append(n.chords2intervals["Aug7th"], "1", "3", "#5", "b7")
-	n.chords2intervals["Dom7th"] = append(n.chords2intervals["Dom7th"], "1", "3", "5", "b7")
-	n.chords2intervals["Dom9th"] = append(n.chords2intervals["Dom9th"], "1", "3", "5", "b7", "2")
-	n.chords2intervals["Dom11th"] = append(n.chords2intervals["Dom11th"], "1", "5", "b7", "2", "4")
-	n.chords2intervals["Sus2"] = append(n.chords2intervals["Sus2"], "1", "2", "5")
-	n.chords2intervals["Sus4"] = append(n.chords2intervals["Sus4"], "1", "4", "5")
-	n.chords2intervals["Add9"] = append(n.chords2intervals["Add9"], "1", "3", "5", "2")
+	n.chords2intervals["major"] = append(n.chords2intervals["major"], "1", "3", "5")
+	n.chords2intervals["major6th"] = append(n.chords2intervals["major6th"], "1", "3", "5", "6")
+	n.chords2intervals["major7th"] = append(n.chords2intervals["major7th"], "1", "3", "5", "7")
+	n.chords2intervals["major9th"] = append(n.chords2intervals["major9th"], "1", "3", "5", "7", "2")
+	n.chords2intervals["major13th"] = append(n.chords2intervals["major13th"], "1", "3", "5", "7", "2", "6")
+	n.chords2intervals["minor"] = append(n.chords2intervals["minor"], "1", "b3", "5")
+	n.chords2intervals["minor6th"] = append(n.chords2intervals["minor6th"], "1", "b3", "5", "6")
+	n.chords2intervals["minor7th"] = append(n.chords2intervals["minor7th"], "1", "b3", "5", "b7")
+	n.chords2intervals["minor9th"] = append(n.chords2intervals["minor9th"], "1", "b3", "5", "b7", "2")
+	n.chords2intervals["minor11th"] = append(n.chords2intervals["minor11th"], "1", "b3", "5", "b7", "2", "4")
+	n.chords2intervals["minor13th"] = append(n.chords2intervals["minor13th"], "1", "b3", "5", "b7", "2", "6")
+	n.chords2intervals["dim"] = append(n.chords2intervals["dim"], "1", "b3", "b5")
+	n.chords2intervals["dim7th"] = append(n.chords2intervals["dim7th"], "1", "b3", "b5", "6")
+	n.chords2intervals["dim7b5"] = append(n.chords2intervals["dim7b5"], "1", "b3", "b5", "b7")
+	n.chords2intervals["aug"] = append(n.chords2intervals["aug"], "1", "3", "#5")
+	n.chords2intervals["aug7th"] = append(n.chords2intervals["aug7th"], "1", "3", "#5", "b7")
+	n.chords2intervals["dom7th"] = append(n.chords2intervals["dom7th"], "1", "3", "5", "b7")
+	n.chords2intervals["dom9th"] = append(n.chords2intervals["dom9th"], "1", "3", "5", "b7", "2")
+	n.chords2intervals["dom11th"] = append(n.chords2intervals["dom11th"], "1", "5", "b7", "2", "4")
+	n.chords2intervals["sus2"] = append(n.chords2intervals["sus2"], "1", "2", "5")
+	n.chords2intervals["sus4"] = append(n.chords2intervals["sus4"], "1", "4", "5")
+	n.chords2intervals["add9"] = append(n.chords2intervals["add9"], "1", "3", "5", "2")
 
 	n.intervals2chords = make(map[int]string)
 	for chord, v := range n.chords2intervals {
@@ -52,10 +52,6 @@ func NewChord(root note.Note) *Chord {
 			m = m | 1<<(11-i)
 		}
 		n.intervals2chords[m] = chord
-	}
-	for key, value := range n.interval.GetOffset() {
-		fmt.Printf("")
-		fmt.Printf("Key: %s, 0x%x\n", key, 1<<(11-value))
 	}
 	allnotes := []note.Note{
 		{Name: "A", Alternate: root.Alternate},
